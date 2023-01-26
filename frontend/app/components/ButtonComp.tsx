@@ -13,14 +13,22 @@ interface Props {
   loading?: boolean;
   disabled?: boolean;
   onPress?: any;
+  btnExtraStyle?: any;
 }
-const ButtonComp: FC<Props> = ({text, disabled, loading, onPress}) => {
+const ButtonComp: FC<Props> = ({
+  text,
+  disabled,
+  loading,
+  onPress,
+  btnExtraStyle,
+}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
       style={[
         styles.btnContainer,
+        btnExtraStyle,
         {backgroundColor: disabled ? AppColors.LightSkyBlue : AppColors.BLUE},
       ]}>
       {loading ? (

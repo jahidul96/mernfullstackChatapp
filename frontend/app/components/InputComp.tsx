@@ -7,13 +7,21 @@ interface Props {
   value?: string;
   setValue: any;
   secured?: boolean;
+  extraStyle?: any;
 }
-const InputComp: FC<Props> = ({placeholder, setValue, value, secured}) => (
+const InputComp: FC<Props> = ({
+  placeholder,
+  setValue,
+  value,
+  secured,
+  extraStyle,
+}) => (
   <TextInput
-    style={styles.inputStyle}
+    style={[styles.inputStyle, extraStyle]}
     placeholder={placeholder}
     onChangeText={text => setValue(text)}
     secureTextEntry={secured}
+    value={value}
   />
 );
 

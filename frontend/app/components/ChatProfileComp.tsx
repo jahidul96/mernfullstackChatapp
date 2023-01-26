@@ -6,9 +6,10 @@ import {AuthContext} from '../context/AuthContext';
 
 interface Props {
   data: any;
+  navigation: any;
 }
 
-const ChatProfileComp: FC<Props> = ({data}) => {
+const ChatProfileComp: FC<Props> = ({data, navigation}) => {
   const {user} = useContext<any>(AuthContext);
 
   // excluding myself
@@ -18,7 +19,7 @@ const ChatProfileComp: FC<Props> = ({data}) => {
   return (
     <>
       {alluser.map((user: any) => (
-        <ChatUserProfile key={user._id} data={user} />
+        <ChatUserProfile key={user._id} data={user} navigation={navigation} />
       ))}
     </>
   );
@@ -28,12 +29,13 @@ export default ChatProfileComp;
 
 interface ChatUserProfileProps {
   data: any;
+  navigation: any;
 }
-const ChatUserProfile: FC<ChatUserProfileProps> = ({data}) => {
+const ChatUserProfile: FC<ChatUserProfileProps> = ({data, navigation}) => {
   return (
     <TouchableOpacity
       style={styles.chatUserContainer}
-      onPress={() => Alert.alert('hell')}>
+      onPress={() => navigation.navigate('Message')}>
       <View style={styles.contentWrapper}>
         <View style={styles.avatorContainer}>
           <Ionicons name="person" size={24} />

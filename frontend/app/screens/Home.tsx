@@ -30,7 +30,7 @@ const Home: FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ChatProfileComp data={allusers} />
+      <ChatProfileComp data={allusers} navigation={navigation} />
     </View>
   );
 };
