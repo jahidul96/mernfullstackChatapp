@@ -2,14 +2,16 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    message: "hey ,i m route auth!!",
-  });
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find({}, { password: 0 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 // register a user
-
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
   const hasedPassword = await bcrypt.hash(password, 10);
@@ -17,13 +19,11 @@ router.post("/register", async (req, res) => {
 
   try {
     const userExists = await User.findOne({ email });
-
     if (userExists) {
       return res.status(200).json({
         message: "already exists this user!!",
       });
     }
-
     const user = new User(req.body);
     const savedUser = await user.save();
 
