@@ -10,16 +10,14 @@ interface Props {
 }
 
 const ChatProfileComp: FC<Props> = ({data, navigation}) => {
-  const {user} = useContext<any>(AuthContext);
-
-  // excluding myself
-  const alluser = data.filter((d: any) => d._id !== user?._id);
-  //   console.log('all user =========');
-  //   console.log(alluser);
   return (
     <>
-      {alluser.map((user: any) => (
-        <ChatUserProfile key={user._id} data={user} navigation={navigation} />
+      {data.map((user: any) => (
+        <ChatUserProfile
+          key={user._id}
+          userdata={user}
+          navigation={navigation}
+        />
       ))}
     </>
   );
@@ -28,21 +26,20 @@ const ChatProfileComp: FC<Props> = ({data, navigation}) => {
 export default ChatProfileComp;
 
 interface ChatUserProfileProps {
-  data: any;
+  userdata: any;
   navigation: any;
 }
-const ChatUserProfile: FC<ChatUserProfileProps> = ({data, navigation}) => {
+const ChatUserProfile: FC<ChatUserProfileProps> = ({userdata, navigation}) => {
   return (
     <TouchableOpacity
       style={styles.chatUserContainer}
-      onPress={() => navigation.navigate('Message')}>
+      onPress={() => navigation.navigate('Chat', {userdata})}>
       <View style={styles.contentWrapper}>
         <View style={styles.avatorContainer}>
           <Ionicons name="person" size={24} />
         </View>
         <View style={styles.nameContainer}>
-          <Text>{data?.name}</Text>
-          <Text>hello</Text>
+          <Text>{userdata?.name}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -55,6 +52,9 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     marginBottom: 10,
+    backgroundColor: AppColors.GRAY,
+    borderRadius: 10,
+    paddingHorizontal: 6,
   },
   contentWrapper: {
     flexDirection: 'row',

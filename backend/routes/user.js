@@ -2,9 +2,14 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const users = await User.find({}, { password: 0 });
+    const users = await User.find(
+      {
+        _id: { $ne: req.params.id },
+      },
+      { password: 0 }
+    );
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json(error);

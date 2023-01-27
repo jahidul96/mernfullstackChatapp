@@ -5,6 +5,7 @@ require("dotenv").config();
 
 // module imports
 const authRoutes = require("./routes/user");
+const messageRoutes = require("./routes/messageRoutes");
 
 // app initialization
 const app = express();
@@ -15,6 +16,7 @@ const PORT = 4000;
 app.use(express.json());
 // module routes
 app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
 // db connection
 mongoose.set("strictQuery", true);

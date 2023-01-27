@@ -15,7 +15,7 @@ const Home: FC<Props> = ({navigation}) => {
   const [allusers, setAllusers] = useState([]);
 
   // base url
-  const url = `${endpoint}/api/auth`;
+  const url = `${endpoint}/api/auth/${user?._id}`;
 
   useEffect(() => {
     getDataOnce(url)
@@ -40,7 +40,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
 });

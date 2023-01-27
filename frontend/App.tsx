@@ -8,7 +8,7 @@ import {AuthContext, AuthProvider} from './app/context/AuthContext';
 import Home from './app/screens/Home';
 import {getData} from './app/utils/AppStorage';
 import Loading from './app/screens/Loading';
-import Message from './app/screens/Message';
+import Chat from './app/screens/Chat';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,7 +41,7 @@ const App = () => {
           ) : user ? (
             <>
               <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="Message" component={Message} />
+              <Stack.Screen name="Chat" component={Chat} />
             </>
           ) : (
             <>
