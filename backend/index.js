@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const db = require("./db");
 require("dotenv").config();
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 // module imports
 const authRoutes = require("./routes/user");
@@ -27,3 +29,17 @@ db()
   });
 // server listen
 app.listen(PORT, () => console.log("Server started!!"));
+
+// socket
+
+// server initialize for socekte
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+//   /* options */
+// });
+
+// io.on("connection", (socket) => {
+//   // ...
+// });
+
+// httpServer.listen(3000);

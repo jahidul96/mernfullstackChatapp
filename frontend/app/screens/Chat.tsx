@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, ScrollView, Alert} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Alert,
+  StatusBar,
+} from 'react-native';
 import React, {useState, FC, useEffect, useContext} from 'react';
 import {AppColors} from '../utils/AppColors';
 import InputComp from '../components/InputComp';
@@ -57,6 +64,7 @@ const Chat: FC<Props> = ({route}) => {
       style={{
         flex: 1,
       }}>
+      <StatusBar backgroundColor={AppColors.DEEPBLUE} />
       <View style={styles.topContainer}>
         <Text style={styles.namePlaceholder}>Message</Text>
       </View>
@@ -140,11 +148,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 12,
     backgroundColor: AppColors.BLACK,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 7,
     minWidth: '20%',
     maxWidth: '80%',
-    borderRadius: 6,
+    borderRadius: 19,
     color: AppColors.WHITE,
   },
 
