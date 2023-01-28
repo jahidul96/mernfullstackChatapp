@@ -3,35 +3,39 @@ import React, {FC, useContext} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../context/AuthContext';
 import {AppColors} from '../utils/AppColors';
-import {useNavigation} from '@react-navigation/native';
+import {Image} from 'react-native';
 
 interface Props {
   members: any;
   chatId: any;
+  onPress?: any;
 }
-const ChatMessageProfile: FC<Props> = ({members, chatId}) => {
-  //   console.log(members);
+
+const img =
+  'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg';
+
+const ChatMessageProfile: FC<Props> = ({members, chatId, onPress}) => {
   const {user} = useContext<any>(AuthContext);
-  const navigation = useNavigation<any>();
 
-  const allChats = members.filter((member: any) => member._id !== user?._id);
-  //   console.log(allChats);
+  const allChats = members?.filter((member: any) => member._id !== user?._id);
 
-  const gotoMsg = (chatuserdata: any) => {
-    // console.log(chatId);
-    navigation.navigate('Chat', {contactData: chatuserdata, chatId: chatId});
-  };
   return (
     <>
-      {allChats.map((chat: any, index: any) => (
+      {allChats?.map((chat: any, index: any) => (
         <TouchableOpacity
           style={styles.container}
           key={index}
-          onPress={() => gotoMsg(chat)}>
-          <View>
-            <Ionicons name="person" size={24} />
+          onPress={() => onPress(chat, chatId)}>
+          <View style={styles.imgWrapper}>
+            <Image source={{uri: img}} style={styles.imgStyle} />
           </View>
-          <Text style={styles.name}>{chat?.name}</Text>
+          <View style={styles.rightContainer}>
+            <View style={styles.nameandDateContainer}>
+              <Text style={styles.name}>{chat?.name}</Text>
+              <Text style={styles.date}>1/2/23</Text>
+            </View>
+            <Text style={styles.lastmsg}>last message</Text>
+          </View>
         </TouchableOpacity>
       ))}
     </>
@@ -43,16 +47,40 @@ export default ChatMessageProfile;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 50,
+    height: 55,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: AppColors.GRAY,
     paddingHorizontal: 8,
     borderRadius: 6,
     marginBottom: 8,
   },
-  name: {
-    marginLeft: 7,
-    fontSize: 16,
+  imgWrapper: {
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  imgStyle: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 100,
+  },
+  rightContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginLeft: 8,
+    marginBottom: 4,
+  },
+  nameandDateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  name: {
+    fontSize: 16,
+    color: AppColors.BLACK,
+    textTransform: 'capitalize',
+  },
+  date: {},
+  lastmsg: {},
 });

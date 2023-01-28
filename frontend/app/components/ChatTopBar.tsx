@@ -1,30 +1,47 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {FC} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {AppColors} from '../utils/AppColors';
 import {useNavigation} from '@react-navigation/native';
 
-const ChatTopBar = ({contactData}) => {
+interface Props {
+  contactData?: any;
+  text?: string;
+  home?: boolean;
+}
+const ChatTopBar: FC<Props> = ({contactData, text, home}) => {
   const navigation = useNavigation<any>();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {height: home ? 70 : 60}]}>
       {/* profile container */}
       <View style={styles.leftContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={22} color={AppColors.WHITE} />
-        </TouchableOpacity>
-        <Text style={styles.namePlaceholder}>{contactData?.name}</Text>
+        {home ? null : (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={22} color={AppColors.WHITE} />
+          </TouchableOpacity>
+        )}
+
+        <Text style={styles.namePlaceholder}>
+          {text ? text : contactData?.name}
+        </Text>
       </View>
 
       {/* icon container */}
-
       <View style={styles.rightContainer}>
         <TouchableOpacity>
-          <Ionicons name="md-videocam" size={22} color={AppColors.WHITE} />
+          <Ionicons
+            name={home ? 'camera-sharp' : 'md-videocam'}
+            size={22}
+            color={AppColors.WHITE}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Ionicons name="call" size={21} color={AppColors.WHITE} />
+          <Ionicons
+            name={home ? 'search' : 'call'}
+            size={21}
+            color={AppColors.WHITE}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
           <Entypo

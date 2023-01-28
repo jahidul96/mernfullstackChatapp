@@ -13,6 +13,7 @@ import {getDataOnce} from '../api/getDataOneTime';
 import {AppColors} from '../utils/AppColors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ChatMessageProfile from '../components/ChatMessageProfile';
+import ChatTopBar from '../components/ChatTopBar';
 
 interface Props {
   navigation: any;
@@ -39,13 +40,18 @@ const Home: FC<Props> = ({navigation}) => {
     return unsubscribe;
   }, [navigation]);
 
+  // gotoMsg
+  const gotoMsg = (chat: any, chatId: any) => {
+    // console.log(chatId);
+    navigation.navigate('Chat', {contactData: chat, chatId: chatId});
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
-      <View style={styles.topContainer}>
-        <Text style={styles.appText}>Chatapp</Text>
-      </View>
 
+      {/* topbar content */}
+      <ChatTopBar home={true} text="Chatapp" />
       {/* all chats chats */}
 
       <ScrollView>
@@ -55,6 +61,7 @@ const Home: FC<Props> = ({navigation}) => {
               key={index}
               members={chat?.members}
               chatId={chat?._id}
+              onPress={gotoMsg}
             />
           ))}
         </View>
@@ -75,6 +82,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: AppColors.WHITE,
   },
   topContainer: {
     width: '100%',

@@ -113,7 +113,6 @@ const NewChat: FC<Props> = ({route}) => {
             {allMsg?.length == 0 ? (
               <View style={styles.emptyTextContainer}>
                 <Text style={styles.emptyText}>start messageing!</Text>
-                <Text style={styles.emptyText}>new chat page messageing!</Text>
               </View>
             ) : (
               allMsg?.map((msg: any, index) => (
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: AppColors.WHITE,
-    fontSize: 20,
+    fontSize: 17,
   },
   footerContainer: {
     width: '100%',

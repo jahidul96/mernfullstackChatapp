@@ -22,7 +22,6 @@ const Contacts: FC<Props> = ({navigation, route}) => {
   const {user} = useContext<any>(AuthContext);
   const [allusers, setAllusers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const {allChats} = route.params;
 
   // base url
   const url = `${endpoint}/api/auth/${user?._id}`;
@@ -41,6 +40,7 @@ const Contacts: FC<Props> = ({navigation, route}) => {
         });
     }, 1500);
   }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
   contactWraper: {
     width: '100%',
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
 });
