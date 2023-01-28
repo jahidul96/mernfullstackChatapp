@@ -10,6 +10,7 @@ interface Props {
   chatId: any;
   onPress?: any;
   onLongPress: any;
+  lastMsg: any;
 }
 
 const img =
@@ -20,6 +21,7 @@ const ChatMessageProfile: FC<Props> = ({
   chatId,
   onPress,
   onLongPress,
+  lastMsg,
 }) => {
   const {user} = useContext<any>(AuthContext);
 
@@ -41,7 +43,7 @@ const ChatMessageProfile: FC<Props> = ({
               <Text style={styles.name}>{chat?.name}</Text>
               <Text style={styles.date}>1/2/23</Text>
             </View>
-            <Text style={styles.lastmsg}>last message</Text>
+            <Text style={styles.lastmsg}>{lastMsg}</Text>
           </View>
         </TouchableOpacity>
       ))}

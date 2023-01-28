@@ -17,15 +17,27 @@ router.post("/createchat", async (req, res) => {
 
     const createChat = new Chat({
       members: [req.body.senderId, req.body.reciverId],
+      lastMsg: req.body.lastMsg,
     });
     const chat = await (
       await createChat.save()
     ).populate("members", "-password");
 
-    res.status(200).json({
-      message: "new chat created!",
-      chat,
+    res.status(200).json(chat);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// update a chat
+router.put("/update/:id", async (req, res) => {
+  console.log(req.body);
+  try {
+    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
     });
+
+    res.status(200).json(updatedChat);
   } catch (error) {
     res.status(500).json(error);
   }

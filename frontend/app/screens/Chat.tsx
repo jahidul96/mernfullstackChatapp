@@ -19,6 +19,8 @@ import {postDataToDb} from '../api/postDataToDb';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import ChatTopBar from '../components/ChatTopBar';
+import axios from 'axios';
+import {updateData} from '../api/updateData';
 
 interface Props {
   route: any;
@@ -51,6 +53,8 @@ const Chat: FC<Props> = ({route}) => {
     }, 1500);
   }, []);
 
+  // update last msg route path
+  const updateroutepath = `api/chat/update/${chatId}`;
   // sendmsg
   const sendMsg = () => {
     const routePath = '/api/message/postmessage';
@@ -63,8 +67,14 @@ const Chat: FC<Props> = ({route}) => {
       text,
     };
     postDataToDb(data, routePath)
-      .then(data => {
+      .then(async data => {
         // console.log(data);
+        const updatedText = {lastMsg: text};
+        updateData(updateroutepath, updatedText)
+          .then(data => {
+            // console.log(data);
+          })
+          .catch(err => console.log(err));
         setAllMsg([...allMsg, data]);
       })
       .catch(err => {

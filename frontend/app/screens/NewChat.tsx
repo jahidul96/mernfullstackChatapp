@@ -65,10 +65,12 @@ const NewChat: FC<Props> = ({route}) => {
     const chatdata = {
       senderId: user?._id,
       reciverId: contactData?._id,
+      lastMsg: text,
     };
 
     postDataToDb(chatdata, createchaturl)
       .then(data => {
+        // console.log(data);
         const msgData = {
           chatId: data._id,
           senderId: user?._id,
@@ -76,7 +78,7 @@ const NewChat: FC<Props> = ({route}) => {
         };
         postDataToDb(msgData, routePath)
           .then(data => {
-            console.log(data);
+            // console.log(data);
             setAllMsg([...allMsg, data]);
           })
           .catch(err => {
