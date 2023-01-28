@@ -45,7 +45,7 @@ const Contacts: FC<Props> = ({navigation, route}) => {
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
       <View style={styles.topContainer}>
-        <TopBackComp text="Contacts" onPress={() => navigation.goBack()} />
+        <TopBackComp text="Contacts" extraStyle={styles.extarBackStyle} />
       </View>
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -90,5 +90,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 10,
     paddingHorizontal: 10,
+  },
+  extarBackStyle: {
+    paddingHorizontal: 0,
   },
 });

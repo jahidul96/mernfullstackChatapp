@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC, useContext} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../context/AuthContext';
@@ -9,12 +9,18 @@ interface Props {
   members: any;
   chatId: any;
   onPress?: any;
+  onLongPress: any;
 }
 
 const img =
   'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg';
 
-const ChatMessageProfile: FC<Props> = ({members, chatId, onPress}) => {
+const ChatMessageProfile: FC<Props> = ({
+  members,
+  chatId,
+  onPress,
+  onLongPress,
+}) => {
   const {user} = useContext<any>(AuthContext);
 
   const allChats = members?.filter((member: any) => member._id !== user?._id);
@@ -25,6 +31,7 @@ const ChatMessageProfile: FC<Props> = ({members, chatId, onPress}) => {
         <TouchableOpacity
           style={styles.container}
           key={index}
+          onLongPress={onLongPress}
           onPress={() => onPress(chat, chatId)}>
           <View style={styles.imgWrapper}>
             <Image source={{uri: img}} style={styles.imgStyle} />

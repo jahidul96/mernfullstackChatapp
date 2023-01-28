@@ -11,6 +11,8 @@ import Loading from './app/screens/Loading';
 import Chat from './app/screens/Chat';
 import Contacts from './app/screens/Contacts';
 import NewChat from './app/screens/NewChat';
+import Profile from './app/screens/Profile';
+import CreateGroup from './app/screens/CreateGroup';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +48,8 @@ const App = () => {
               <Stack.Screen name="Chat" component={Chat} />
               <Stack.Screen name="NewChat" component={NewChat} />
               <Stack.Screen name="Contacts" component={Contacts} />
+              <Stack.Screen name="Profile" component={Profile} />
+              <Stack.Screen name="CreateGroup" component={CreateGroup} />
             </>
           ) : (
             <>

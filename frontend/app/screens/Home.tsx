@@ -14,6 +14,8 @@ import {AppColors} from '../utils/AppColors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ChatMessageProfile from '../components/ChatMessageProfile';
 import ChatTopBar from '../components/ChatTopBar';
+import {Alert} from 'react-native';
+import TextButton from '../components/TextButton';
 
 interface Props {
   navigation: any;
@@ -21,6 +23,7 @@ interface Props {
 const Home: FC<Props> = ({navigation}) => {
   const {user} = useContext<any>(AuthContext);
   const [allChats, setAllChats] = useState([]);
+  const [showDialogBox, setShowDialogBox] = useState(false);
 
   // base url
   const url = `${endpoint}/api/chat/${user?._id}`;
@@ -36,7 +39,6 @@ const Home: FC<Props> = ({navigation}) => {
           console.log(err);
         });
     });
-
     return unsubscribe;
   }, [navigation]);
 
@@ -46,12 +48,42 @@ const Home: FC<Props> = ({navigation}) => {
     navigation.navigate('Chat', {contactData: chat, chatId: chatId});
   };
 
+  // wantToDelete
+  const wantToDelete = () => {
+    Alert.alert('hello');
+  };
+
+  // menuPrees
+  const menuPress = () => {
+    setShowDialogBox(!showDialogBox);
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
+      {/* showDialogBox */}
+      {showDialogBox && (
+        <View style={styles.dialogBox}>
+          <TextButton
+            text="New Group"
+            onPress={() => {
+              navigation.navigate('CreateGroup');
+              setShowDialogBox(!showDialogBox);
+            }}
+          />
+          <TextButton
+            text="Profile"
+            onPress={() => {
+              navigation.navigate('Profile');
+              setShowDialogBox(!showDialogBox);
+            }}
+          />
+        </View>
+      )}
+
       {/* topbar content */}
-      <ChatTopBar home={true} text="Chatapp" />
+      <ChatTopBar home={true} text="Chatapp" menuPrees={menuPress} />
       {/* all chats chats */}
 
       <ScrollView>
@@ -62,6 +94,7 @@ const Home: FC<Props> = ({navigation}) => {
               members={chat?.members}
               chatId={chat?._id}
               onPress={gotoMsg}
+              onLongPress={wantToDelete}
             />
           ))}
         </View>
@@ -70,7 +103,10 @@ const Home: FC<Props> = ({navigation}) => {
       {/* floating button */}
       <TouchableOpacity
         style={styles.flotingContainer}
-        onPress={() => navigation.navigate('Contacts', {allChats: allChats})}>
+        onPress={() => {
+          setShowDialogBox(false);
+          navigation.navigate('Contacts', {allChats: allChats});
+        }}>
         <MaterialIcons name="chat" size={20} color={AppColors.WHITE} />
       </TouchableOpacity>
     </View>
@@ -112,5 +148,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     bottom: 40,
     right: 40,
+  },
+
+  dialogBox: {
+    position: 'absolute',
+    width: '45%',
+    height: '20%',
+    right: 15,
+    top: 60,
+    justifyContent: 'center',
+    backgroundColor: AppColors.WHITE,
+    elevation: 2,
+    zIndex: 999,
   },
 });

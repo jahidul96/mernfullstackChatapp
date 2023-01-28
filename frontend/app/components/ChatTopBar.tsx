@@ -9,8 +9,9 @@ interface Props {
   contactData?: any;
   text?: string;
   home?: boolean;
+  menuPrees?: any;
 }
-const ChatTopBar: FC<Props> = ({contactData, text, home}) => {
+const ChatTopBar: FC<Props> = ({contactData, text, home, menuPrees}) => {
   const navigation = useNavigation<any>();
   return (
     <View style={[styles.container, {height: home ? 70 : 60}]}>
@@ -28,14 +29,13 @@ const ChatTopBar: FC<Props> = ({contactData, text, home}) => {
       </View>
 
       {/* icon container */}
-      <View style={styles.rightContainer}>
-        <TouchableOpacity>
-          <Ionicons
-            name={home ? 'camera-sharp' : 'md-videocam'}
-            size={22}
-            color={AppColors.WHITE}
-          />
-        </TouchableOpacity>
+      <View style={[styles.rightContainer, home && {width: '20%'}]}>
+        {home ? null : (
+          <TouchableOpacity>
+            <Ionicons name={'md-videocam'} size={22} color={AppColors.WHITE} />
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity>
           <Ionicons
             name={home ? 'search' : 'call'}
@@ -43,7 +43,7 @@ const ChatTopBar: FC<Props> = ({contactData, text, home}) => {
             color={AppColors.WHITE}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={menuPrees}>
           <Entypo
             name="dots-three-vertical"
             size={20}
