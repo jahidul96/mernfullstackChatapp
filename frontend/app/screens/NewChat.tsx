@@ -22,7 +22,7 @@ import {useNavigation} from '@react-navigation/native';
 interface Props {
   route: any;
 }
-const Chat: FC<Props> = ({route}) => {
+const NewChat: FC<Props> = ({route}) => {
   const {user} = useContext<any>(AuthContext);
   const {contactData, chatId} = route.params;
   const [text, setText] = useState('');
@@ -41,7 +41,7 @@ const Chat: FC<Props> = ({route}) => {
       getDataOnce(messageUrl)
         .then(data => {
           // console.log(data);
-          setAllMsg(data);
+          // setAllMsg(data);
           setLoading(false);
         })
         .catch(err => {
@@ -51,24 +51,32 @@ const Chat: FC<Props> = ({route}) => {
   }, []);
 
   // sendmsg
+
   const sendMsg = () => {
     const routePath = '/api/message/postmessage';
     if (!text) {
       return Alert.alert('Type a message!');
     }
-    const data = {
-      chatId: chatId,
-      senderId: user?._id,
-      text,
-    };
-    postDataToDb(data, routePath)
-      .then(data => {
-        console.log(data);
-        setAllMsg([...allMsg, data]);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+
+    if (chatId) {
+      const data = {
+        chatId: chatId,
+        senderId: user?._id,
+        text,
+      };
+      postDataToDb(data, routePath)
+        .then(data => {
+          console.log(data);
+          // setAllMsg([...allMsg, data]);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      Alert.alert('no chat create one!!');
+      console.log("chat doesn't exist");
+      console.log(chatId);
+    }
 
     setText('');
   };
@@ -101,6 +109,7 @@ const Chat: FC<Props> = ({route}) => {
             {allMsg?.length == 0 ? (
               <View style={styles.emptyTextContainer}>
                 <Text style={styles.emptyText}>start messageing!</Text>
+                <Text style={styles.emptyText}>new chat page messageing!</Text>
               </View>
             ) : (
               allMsg?.map((msg: any, index) => (
@@ -135,7 +144,7 @@ const Chat: FC<Props> = ({route}) => {
   );
 };
 
-export default Chat;
+export default NewChat;
 
 interface msgTypes {
   msg: any;
@@ -199,11 +208,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 12,
     backgroundColor: AppColors.BLACK,
-    paddingHorizontal: 13,
+    paddingHorizontal: 15,
     paddingVertical: 7,
     minWidth: '20%',
     maxWidth: '80%',
-    borderRadius: 16,
+    borderRadius: 19,
     color: AppColors.WHITE,
   },
 

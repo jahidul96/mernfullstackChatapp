@@ -16,11 +16,13 @@ import TopBackComp from '../components/TopBackComp';
 
 interface Props {
   navigation: any;
+  route: any;
 }
-const Contacts: FC<Props> = ({navigation}) => {
+const Contacts: FC<Props> = ({navigation, route}) => {
   const {user} = useContext<any>(AuthContext);
   const [allusers, setAllusers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {allChats} = route.params;
 
   // base url
   const url = `${endpoint}/api/auth/${user?._id}`;
@@ -43,7 +45,7 @@ const Contacts: FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
       <View style={styles.topContainer}>
-        <TopBackComp text="ChatApp" onPress={() => navigation.goBack()} />
+        <TopBackComp text="Contacts" onPress={() => navigation.goBack()} />
       </View>
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -52,7 +54,13 @@ const Contacts: FC<Props> = ({navigation}) => {
       ) : (
         <ScrollView>
           <View style={styles.contactWraper}>
-            <ContactProfileComp data={allusers} navigation={navigation} />
+            {allusers?.map((user: any) => (
+              <ContactProfileComp
+                key={user._id}
+                userdata={user}
+                navigation={navigation}
+              />
+            ))}
           </View>
         </ScrollView>
       )}

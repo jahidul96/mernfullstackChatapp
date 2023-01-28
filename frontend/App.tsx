@@ -10,6 +10,7 @@ import {getData} from './app/utils/AppStorage';
 import Loading from './app/screens/Loading';
 import Chat from './app/screens/Chat';
 import Contacts from './app/screens/Contacts';
+import NewChat from './app/screens/NewChat';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const App = () => {
             <>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="Chat" component={Chat} />
+              <Stack.Screen name="NewChat" component={NewChat} />
               <Stack.Screen name="Contacts" component={Contacts} />
             </>
           ) : (

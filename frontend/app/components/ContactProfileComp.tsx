@@ -1,38 +1,43 @@
 import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
-import React, {FC, useContext} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AppColors} from '../utils/AppColors';
+import {AuthContext} from '../context/AuthContext';
+import {getDataOnce} from '../api/getDataOneTime';
+import {endpoint} from '../api/endpoint';
 
 interface Props {
-  data: any;
-  navigation: any;
-}
-
-const ContactProfileComp: FC<Props> = ({data, navigation}) => {
-  return (
-    <>
-      {data.map((user: any) => (
-        <ContactProfile
-          key={user._id}
-          userdata={user}
-          navigation={navigation}
-        />
-      ))}
-    </>
-  );
-};
-
-export default ContactProfileComp;
-
-interface ContactProfileProps {
   userdata: any;
   navigation: any;
 }
-const ContactProfile: FC<ContactProfileProps> = ({userdata, navigation}) => {
+
+const ContactProfileComp: FC<Props> = ({userdata, navigation}) => {
+  // console.log(userdata._id);
+  const {user} = useContext<any>(AuthContext);
+
+  const apiurl = `${endpoint}/api/chat/singlechat?userid=${user?._id}&contactid=${userdata?._id}`;
+
+  const gotoMsg = () => {
+    // calling a api request to server to check already chat created or not!!!
+    getDataOnce(apiurl)
+      .then(data => {
+        // console.log(data);
+        data._id
+          ? navigation.navigate('Chat', {
+              contactData: userdata,
+              chatId: data._id,
+            })
+          : navigation.navigate('NewChat', {
+              contactData: userdata,
+              chatId: data._id,
+            });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
   return (
-    <TouchableOpacity
-      style={styles.chatUserContainer}
-      onPress={() => navigation.navigate('Chat', {userdata})}>
+    <TouchableOpacity style={styles.chatUserContainer} onPress={gotoMsg}>
       <View style={styles.contentWrapper}>
         <View style={styles.avatorContainer}>
           <Ionicons name="person" size={24} />
@@ -44,6 +49,8 @@ const ContactProfile: FC<ContactProfileProps> = ({userdata, navigation}) => {
     </TouchableOpacity>
   );
 };
+
+export default ContactProfileComp;
 
 const styles = StyleSheet.create({
   chatUserContainer: {

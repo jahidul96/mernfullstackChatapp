@@ -59,7 +59,7 @@ const Home: FC<Props> = ({navigation}) => {
       {/* floating button */}
       <TouchableOpacity
         style={styles.flotingContainer}
-        onPress={() => navigation.navigate('Contacts')}>
+        onPress={() => navigation.navigate('Contacts', {allChats: allChats})}>
         <MaterialIcons name="chat" size={20} color={AppColors.WHITE} />
       </TouchableOpacity>
     </View>

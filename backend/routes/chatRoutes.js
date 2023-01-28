@@ -2,7 +2,7 @@ const Chat = require("../models/chatModel");
 
 const router = require("express").Router();
 
-// create c chat
+// create a chat
 router.post("/createchat", async (req, res) => {
   try {
     const chatExist = await Chat.findOne({
@@ -29,6 +29,30 @@ router.post("/createchat", async (req, res) => {
       message: "new chat created!",
       chat,
     });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// get a specific chats id!!
+
+router.get("/singlechat", async (req, res) => {
+  const { userid, contactid } = req.query;
+  try {
+    const mychat = await Chat.findOne({
+      members: {
+        $all: [userid, contactid],
+      },
+    });
+
+    if (mychat) {
+      res.status(200).json(mychat);
+    } else {
+      res.status(200).json({
+        message: "no chat found",
+        _id: "",
+      });
+    }
   } catch (error) {
     res.status(500).json(error);
   }
