@@ -12,10 +12,7 @@ router.post("/createchat", async (req, res) => {
     }).populate("members", "-password");
 
     if (chatExist) {
-      return res.status(200).json({
-        message: "old chat ",
-        chatExist,
-      });
+      return res.status(200).json(chatExist);
     }
 
     const createChat = new Chat({

@@ -25,15 +25,19 @@ const Home: FC<Props> = ({navigation}) => {
   const url = `${endpoint}/api/chat/${user?._id}`;
 
   useEffect(() => {
-    getDataOnce(url)
-      .then(data => {
-        // console.log(data);
-        setAllChats(data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getDataOnce(url)
+        .then(data => {
+          // console.log(data);
+          setAllChats(data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

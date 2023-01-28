@@ -18,6 +18,7 @@ import {endpoint} from '../api/endpoint';
 import {postDataToDb} from '../api/postDataToDb';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import ChatTopBar from '../components/ChatTopBar';
 
 interface Props {
   route: any;
@@ -63,7 +64,7 @@ const Chat: FC<Props> = ({route}) => {
     };
     postDataToDb(data, routePath)
       .then(data => {
-        console.log(data);
+        // console.log(data);
         setAllMsg([...allMsg, data]);
       })
       .catch(err => {
@@ -80,12 +81,7 @@ const Chat: FC<Props> = ({route}) => {
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
       {/* top header comp */}
-      <View style={styles.topContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={22} color={AppColors.WHITE} />
-        </TouchableOpacity>
-        <Text style={styles.namePlaceholder}>{contactData?.name}</Text>
-      </View>
+      <ChatTopBar contactData={contactData} />
 
       {/* messages */}
       <ScrollView
@@ -165,29 +161,12 @@ const Message: FC<msgTypes> = ({msg, index, currentuser}) => {
 };
 
 const styles = StyleSheet.create({
-  topContainer: {
-    width: '100%',
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: AppColors.DEEPBLUE,
-    paddingHorizontal: 20,
-    // borderBottomColor: AppColors.GRAY,
-    // borderBottomWidth: 1,
-    elevation: 3,
-  },
-
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  namePlaceholder: {
-    color: AppColors.WHITE,
-    fontSize: 19,
-    marginLeft: 8,
-    textTransform: 'capitalize',
-  },
+
   msgContainer: {
     padding: 10,
   },
@@ -201,16 +180,17 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.BLACK,
     paddingHorizontal: 13,
     paddingVertical: 7,
-    minWidth: '20%',
+    minWidth: '10%',
     maxWidth: '80%',
     borderRadius: 16,
     color: AppColors.WHITE,
   },
 
   myMsgStyle: {alignItems: 'flex-end'},
-  friendMsg: {alignItems: 'flex-start'},
+  friendMsg: {alignItems: 'flex-start', textAlign: 'left'},
   mymsgTextStyle: {
     backgroundColor: AppColors.BLUE,
+    textAlign: 'right',
   },
 
   emptyTextContainer: {

@@ -18,6 +18,7 @@ import {endpoint} from '../api/endpoint';
 import {postDataToDb} from '../api/postDataToDb';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import ChatTopBar from '../components/ChatTopBar';
 
 interface Props {
   route: any;
@@ -50,35 +51,43 @@ const NewChat: FC<Props> = ({route}) => {
     }, 1500);
   }, []);
 
-  // sendmsg
+  //   create chat api
+  const createchaturl = '/api/chat/createchat';
+  // post msg api route path
+  const routePath = '/api/message/postmessage';
 
+  // sendmsg
   const sendMsg = () => {
-    const routePath = '/api/message/postmessage';
     if (!text) {
       return Alert.alert('Type a message!');
     }
 
-    if (chatId) {
-      const data = {
-        chatId: chatId,
-        senderId: user?._id,
-        text,
-      };
-      postDataToDb(data, routePath)
-        .then(data => {
-          console.log(data);
-          // setAllMsg([...allMsg, data]);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } else {
-      Alert.alert('no chat create one!!');
-      console.log("chat doesn't exist");
-      console.log(chatId);
-    }
+    const chatdata = {
+      senderId: user?._id,
+      reciverId: contactData?._id,
+    };
 
-    setText('');
+    postDataToDb(chatdata, createchaturl)
+      .then(data => {
+        const msgData = {
+          chatId: data._id,
+          senderId: user?._id,
+          text,
+        };
+        postDataToDb(msgData, routePath)
+          .then(data => {
+            console.log(data);
+            setAllMsg([...allMsg, data]);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+        setText('');
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
   return (
     <View
@@ -88,12 +97,7 @@ const NewChat: FC<Props> = ({route}) => {
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
       {/* top header comp */}
-      <View style={styles.topContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={22} color={AppColors.WHITE} />
-        </TouchableOpacity>
-        <Text style={styles.namePlaceholder}>{contactData?.name}</Text>
-      </View>
+      <ChatTopBar contactData={contactData} />
 
       {/* messages */}
       <ScrollView
@@ -174,29 +178,12 @@ const Message: FC<msgTypes> = ({msg, index, currentuser}) => {
 };
 
 const styles = StyleSheet.create({
-  topContainer: {
-    width: '100%',
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: AppColors.DEEPBLUE,
-    paddingHorizontal: 20,
-    // borderBottomColor: AppColors.GRAY,
-    // borderBottomWidth: 1,
-    elevation: 3,
-  },
-
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  namePlaceholder: {
-    color: AppColors.WHITE,
-    fontSize: 19,
-    marginLeft: 8,
-    textTransform: 'capitalize',
-  },
+
   msgContainer: {
     padding: 10,
   },
@@ -217,9 +204,10 @@ const styles = StyleSheet.create({
   },
 
   myMsgStyle: {alignItems: 'flex-end'},
-  friendMsg: {alignItems: 'flex-start'},
+  friendMsg: {alignItems: 'flex-start', textAlign: 'left'},
   mymsgTextStyle: {
     backgroundColor: AppColors.BLUE,
+    textAlign: 'right',
   },
 
   emptyTextContainer: {
