@@ -2,18 +2,17 @@ import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import React, {FC, useContext} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AppColors} from '../utils/AppColors';
-import {AuthContext} from '../context/AuthContext';
 
 interface Props {
   data: any;
   navigation: any;
 }
 
-const ChatProfileComp: FC<Props> = ({data, navigation}) => {
+const ContactProfileComp: FC<Props> = ({data, navigation}) => {
   return (
     <>
       {data.map((user: any) => (
-        <ChatUserProfile
+        <ContactProfile
           key={user._id}
           userdata={user}
           navigation={navigation}
@@ -23,13 +22,13 @@ const ChatProfileComp: FC<Props> = ({data, navigation}) => {
   );
 };
 
-export default ChatProfileComp;
+export default ContactProfileComp;
 
-interface ChatUserProfileProps {
+interface ContactProfileProps {
   userdata: any;
   navigation: any;
 }
-const ChatUserProfile: FC<ChatUserProfileProps> = ({userdata, navigation}) => {
+const ContactProfile: FC<ContactProfileProps> = ({userdata, navigation}) => {
   return (
     <TouchableOpacity
       style={styles.chatUserContainer}
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     marginBottom: 10,
-    backgroundColor: AppColors.GRAY,
+    backgroundColor: AppColors.LightSkyBlue,
     borderRadius: 10,
     paddingHorizontal: 6,
   },
@@ -61,10 +60,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatorContainer: {
-    width: 45,
-    height: 45,
+    width: 40,
+    height: 40,
     borderRadius: 100,
-    backgroundColor: AppColors.LightSkyBlue,
+    backgroundColor: AppColors.GRAY,
     justifyContent: 'center',
     alignItems: 'center',
   },

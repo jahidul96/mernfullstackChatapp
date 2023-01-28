@@ -8,6 +8,7 @@ const { Server } = require("socket.io");
 // module imports
 const authRoutes = require("./routes/user");
 const messageRoutes = require("./routes/messageRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 // app initialization
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 // module routes
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/chat", chatRoutes);
 
 // db connection
 mongoose.set("strictQuery", true);

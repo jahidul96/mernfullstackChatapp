@@ -28,8 +28,8 @@ const ButtonComp: FC<Props> = ({
       disabled={disabled}
       style={[
         styles.btnContainer,
+        {backgroundColor: disabled && AppColors.LightSkyBlue},
         btnExtraStyle,
-        {backgroundColor: disabled ? AppColors.LightSkyBlue : AppColors.BLUE},
       ]}>
       {loading ? (
         <ActivityIndicator size="small" color="red" />

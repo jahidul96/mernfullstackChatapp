@@ -5,6 +5,7 @@ import {
   ScrollView,
   Alert,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState, FC, useEffect, useContext} from 'react';
 import {AppColors} from '../utils/AppColors';
@@ -14,6 +15,8 @@ import {AuthContext} from '../context/AuthContext';
 import {getDataOnce} from '../api/getDataOneTime';
 import {endpoint} from '../api/endpoint';
 import {postDataToDb} from '../api/postDataToDb';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
 
 interface Props {
   route: any;
@@ -23,19 +26,22 @@ const Chat: FC<Props> = ({route}) => {
   const {userdata} = route.params;
   const [text, setText] = useState('');
   const [allMsg, setAllMsg] = useState([]);
+  const navigation = useNavigation<any>();
 
+  // api endpoint
   const messageUrl = `${endpoint}/api/message?from=${user?._id}&to=${userdata?._id}`;
 
-  useEffect(() => {
-    getDataOnce(messageUrl)
-      .then(data => {
-        // console.log(data);
-        setAllMsg(data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
+  // get all messages
+  // useEffect(() => {
+  //   getDataOnce(messageUrl)
+  //     .then(data => {
+  //       // console.log(data);
+  //       setAllMsg(data);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   // sendmsg
 
@@ -65,19 +71,28 @@ const Chat: FC<Props> = ({route}) => {
         flex: 1,
       }}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
+
+      {/* top header comp */}
       <View style={styles.topContainer}>
-        <Text style={styles.namePlaceholder}>Message</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="chevron-back" size={22} color={AppColors.WHITE} />
+        </TouchableOpacity>
+        <Text style={styles.namePlaceholder}>{userdata?.name}</Text>
       </View>
+
+      {/* messages */}
       <ScrollView
         style={{
-          backgroundColor: AppColors.DEEPBLUE,
+          backgroundColor: AppColors.LIGHTDEEPBLUE,
         }}>
-        <View style={styles.msgContainer}>
+        {/* <View style={styles.msgContainer}>
           {allMsg.map((msg: any, index) => (
             <Message index={index} msg={msg} currentuser={user} />
           ))}
-        </View>
+        </View> */}
       </ScrollView>
+
+      {/* footer comp */}
       <View style={styles.footerContainer}>
         <InputComp
           placeholder="text"
@@ -127,15 +142,19 @@ const styles = StyleSheet.create({
   topContainer: {
     width: '100%',
     height: 60,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: AppColors.DEEPBLUE,
     paddingHorizontal: 20,
-    borderBottomColor: AppColors.GRAY,
-    borderBottomWidth: 1,
+    // borderBottomColor: AppColors.GRAY,
+    // borderBottomWidth: 1,
+    elevation: 3,
   },
   namePlaceholder: {
     color: AppColors.WHITE,
     fontSize: 19,
+    marginLeft: 8,
+    textTransform: 'capitalize',
   },
   msgContainer: {
     padding: 10,
@@ -167,7 +186,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: AppColors.DEEPBLUE,
+    backgroundColor: AppColors.LIGHTDEEPBLUE,
     paddingHorizontal: 15,
   },
   extraStyle: {
@@ -176,5 +195,6 @@ const styles = StyleSheet.create({
   btnExtraStyle: {
     width: '25%',
     marginTop: -10,
+    backgroundColor: AppColors.DEEPBLUE,
   },
 });
