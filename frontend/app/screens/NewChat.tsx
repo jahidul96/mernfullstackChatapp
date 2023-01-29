@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, FC, useEffect, useContext} from 'react';
+import React, {useState, FC, useEffect, useContext, useRef} from 'react';
 import {AppColors} from '../utils/AppColors';
 import InputComp from '../components/InputComp';
 import ButtonComp from '../components/ButtonComp';
@@ -16,22 +16,53 @@ import {AuthContext} from '../context/AuthContext';
 import {getDataOnce} from '../api/getDataOneTime';
 import {endpoint} from '../api/endpoint';
 import {postDataToDb} from '../api/postDataToDb';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
 import ChatTopBar from '../components/ChatTopBar';
+import {io} from 'socket.io-client';
 
 interface Props {
   route: any;
 }
+
+var socket, selectetdChatCompare;
 const NewChat: FC<Props> = ({route}) => {
   const {user} = useContext<any>(AuthContext);
   const {contactData, chatId} = route.params;
   const [text, setText] = useState('');
   const [allMsg, setAllMsg] = useState([]);
-  const navigation = useNavigation<any>();
   const [loading, setLoading] = useState(true);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const scrollViewRef = useRef(null);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
-  // console.log('chatId', chatId);
+  // socket io
+  useEffect(() => {
+    socket = io(endpoint);
+    socket.emit('join', user);
+    socket.on('connected', () => setSocketConnected(true));
+    selectetdChatCompare = chatId;
+    socket.emit('chat room', chatId);
+
+    socket.emit('typing', () => setTyping(true));
+    socket.emit('stop typing', () => setIsTyping(false));
+  }, []);
+
+  useEffect(() => {
+    socket?.on('message recived', (newmessageRecived: any) => {
+      if (
+        !selectetdChatCompare ||
+        selectetdChatCompare !== newmessageRecived.chatId
+      ) {
+        // give notification
+      } else {
+        setAllMsg([...allMsg, newmessageRecived]);
+      }
+    });
+  });
+
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({animated: true});
+  }, [allMsg]);
 
   // api endpoint
   const messageUrl = `${endpoint}/api/message?chatId=${chatId}`;
@@ -79,6 +110,12 @@ const NewChat: FC<Props> = ({route}) => {
         postDataToDb(msgData, routePath)
           .then(data => {
             // console.log(data);
+
+            // data passing to socket so user can recive data instantly
+            socket.emit('new message', data, user._id, [
+              user._id,
+              contactData._id,
+            ]);
             setAllMsg([...allMsg, data]);
           })
           .catch(err => {
@@ -103,6 +140,7 @@ const NewChat: FC<Props> = ({route}) => {
 
       {/* messages */}
       <ScrollView
+        ref={scrollViewRef}
         style={{
           backgroundColor: AppColors.LIGHTDEEPBLUE,
         }}>

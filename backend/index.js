@@ -50,6 +50,13 @@ io.on("connection", (socket) => {
     console.log("user joined rooom " + room);
   });
 
+  // typing indicators
+  socket.on("typing", (room) => {
+    socket.in(room).emit("typing");
+    // console.log(room);
+  });
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
   socket.on("new message", (newmessage, userid, users) => {
     // console.log(newmessage);
     // console.log(user);

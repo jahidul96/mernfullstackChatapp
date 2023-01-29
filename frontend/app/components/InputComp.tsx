@@ -8,6 +8,8 @@ interface Props {
   setValue: any;
   secured?: boolean;
   extraStyle?: any;
+  numberOfLines?: any;
+  multiline?: boolean;
 }
 const InputComp: FC<Props> = ({
   placeholder,
@@ -15,13 +17,17 @@ const InputComp: FC<Props> = ({
   value,
   secured,
   extraStyle,
+  numberOfLines,
+  multiline,
 }) => (
   <TextInput
     style={[styles.inputStyle, extraStyle]}
     placeholder={placeholder}
     onChangeText={text => setValue(text)}
+    numberOfLines={numberOfLines}
     secureTextEntry={secured}
     value={value}
+    multiline={multiline}
   />
 );
 

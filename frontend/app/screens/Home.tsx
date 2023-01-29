@@ -16,12 +16,13 @@ import ChatMessageProfile from '../components/ChatMessageProfile';
 import ChatTopBar from '../components/ChatTopBar';
 import {Alert} from 'react-native';
 import TextButton from '../components/TextButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   navigation: any;
 }
 const Home: FC<Props> = ({navigation}) => {
-  const {user} = useContext<any>(AuthContext);
+  const {user, setUser} = useContext<any>(AuthContext);
   const [allChats, setAllChats] = useState([]);
   const [showDialogBox, setShowDialogBox] = useState(false);
 
@@ -75,8 +76,10 @@ const Home: FC<Props> = ({navigation}) => {
           <TextButton
             text="Profile"
             onPress={() => {
-              navigation.navigate('Profile');
-              setShowDialogBox(!showDialogBox);
+              // navigation.navigate('Profile');
+              // setShowDialogBox(!showDialogBox);
+              AsyncStorage.clear();
+              setUser(null);
             }}
           />
         </View>

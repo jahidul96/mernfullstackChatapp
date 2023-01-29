@@ -33,20 +33,22 @@ const Chat: FC<Props> = ({route}) => {
   const {contactData, chatId} = route.params;
   const [text, setText] = useState('');
   const [allMsg, setAllMsg] = useState([]);
-  const navigation = useNavigation<any>();
   const [loading, setLoading] = useState(true);
   const [socketConnected, setSocketConnected] = useState(false);
   const scrollViewRef = useRef(null);
   const [typing, setTyping] = useState(false);
-  const [isTyping, setisTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   // socket io
   useEffect(() => {
     socket = io(endpoint);
     socket.emit('join', user);
-    socket.on('connection', () => setSocketConnected(true));
+    socket.on('connected', () => setSocketConnected(true));
     selectetdChatCompare = chatId;
     socket.emit('chat room', chatId);
+
+    socket.emit('typing', () => setTyping(true));
+    socket.emit('stop typing', () => setIsTyping(false));
   }, []);
 
   useEffect(() => {
@@ -121,6 +123,7 @@ const Chat: FC<Props> = ({route}) => {
     <View
       style={{
         flex: 1,
+        backgroundColor: AppColors.DEEPBLUE,
       }}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
@@ -164,6 +167,8 @@ const Chat: FC<Props> = ({route}) => {
           setValue={setText}
           extraStyle={styles.extraStyle}
           value={text}
+          numberOfLines={5}
+          multiline={true}
         />
 
         <ButtonComp
@@ -258,6 +263,8 @@ const styles = StyleSheet.create({
   },
   extraStyle: {
     width: '70%',
+    minHeight: 50,
+    maxHeight: 100,
   },
   btnExtraStyle: {
     width: '25%',
