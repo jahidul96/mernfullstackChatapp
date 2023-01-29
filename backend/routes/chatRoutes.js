@@ -31,7 +31,6 @@ router.post("/createchat", async (req, res) => {
 
 // update a chat
 router.put("/update/:id", async (req, res) => {
-  console.log(req.body);
   try {
     const updatedChat = await Chat.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

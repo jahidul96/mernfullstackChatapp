@@ -2,8 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const db = require("./db");
 require("dotenv").config();
-const { createServer } = require("http");
-const { Server } = require("socket.io");
 
 // module imports
 const authRoutes = require("./routes/user");
@@ -30,18 +28,37 @@ db()
     console.log(err.message);
   });
 // server listen
-app.listen(PORT, () => console.log("Server started!!"));
+const server = app.listen(PORT, () => console.log("Server started!!"));
 
 // socket
 
-// server initialize for socekte
-// const httpServer = createServer(app);
-// const io = new Server(httpServer, {
-//   /* options */
-// });
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://192.168.1.4:4000",
+  },
+});
 
-// io.on("connection", (socket) => {
-//   // ...
-// });
+io.on("connection", (socket) => {
+  socket.on("join", (userdata) => {
+    socket.join(userdata._id);
+    socket.emit("connected");
+  });
 
-// httpServer.listen(3000);
+  socket.on("chat room", (room) => {
+    socket.join(room);
+    console.log("user joined rooom " + room);
+  });
+
+  socket.on("new message", (newmessage, userid, users) => {
+    // console.log(newmessage);
+    // console.log(user);
+    // console.log(users);
+
+    if (!users) return console.log("no chat user found");
+    users.forEach((user) => {
+      if (user == newmessage.senderId) return;
+      socket.in(user).emit("message recived", newmessage);
+    });
+  });
+});
