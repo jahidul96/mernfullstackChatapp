@@ -9,6 +9,7 @@ import InputComp from '../../components/InputComp';
 import ButtonComp from '../../components/ButtonComp';
 import TextComp from '../../components/TextComp';
 import {authStyles} from './authStyles';
+import {registerUrl} from '../../api/endpoint';
 
 interface Props {
   navigation: any;
@@ -37,7 +38,7 @@ const Register: FC<Props> = ({navigation}) => {
 
     setTimeout(() => {
       try {
-        postDataToDb(data, routePath)
+        postDataToDb(data, registerUrl)
           .then(async value => {
             Alert.alert(value.message);
             const jsonValue = JSON.stringify(value.user);

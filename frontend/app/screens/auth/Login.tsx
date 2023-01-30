@@ -8,6 +8,7 @@ import ButtonComp from '../../components/ButtonComp';
 import TextComp from '../../components/TextComp';
 import {AppColors} from '../../utils/AppColors';
 import {authStyles} from './authStyles';
+import {loginUrl, registerUrl} from '../../api/endpoint';
 
 interface Props {
   navigation: any;
@@ -21,7 +22,6 @@ const Login: FC<Props> = ({navigation}) => {
 
   const login = async () => {
     setLoading(true);
-    const routePath = '/api/auth/login';
     if (!email || !password) {
       setLoading(false);
       return Alert.alert("Fill all the field's");
@@ -34,7 +34,7 @@ const Login: FC<Props> = ({navigation}) => {
 
     setTimeout(() => {
       try {
-        postDataToDb(data, routePath)
+        postDataToDb(data, loginUrl)
           .then(async value => {
             Alert.alert(value.message);
             const jsonValue = JSON.stringify(value.user);
@@ -82,3 +82,5 @@ const Login: FC<Props> = ({navigation}) => {
 };
 
 export default Login;
+
+const styles = StyleSheet.create({});
