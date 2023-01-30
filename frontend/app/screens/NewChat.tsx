@@ -21,10 +21,10 @@ const NewChat: FC<Props> = ({route}) => {
   const {user} = useContext<any>(AuthContext);
   const {contactData, chatId} = route.params;
   const [text, setText] = useState('');
-  const [allMsg, setAllMsg] = useState([]);
+  const [allMsg, setAllMsg] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [socketConnected, setSocketConnected] = useState(false);
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<any>(null);
 
   // api endpoints
 

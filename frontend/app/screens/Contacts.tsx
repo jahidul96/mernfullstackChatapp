@@ -13,6 +13,7 @@ import {getDataOnce} from '../api/getDataOneTime';
 import {AppColors} from '../utils/AppColors';
 import ContactProfileComp from '../components/ContactProfileComp';
 import TopBackComp from '../components/TopBackComp';
+import ChatTopBar from '../components/ChatTopBar';
 
 interface Props {
   navigation: any;
@@ -41,12 +42,12 @@ const Contacts: FC<Props> = ({navigation, route}) => {
     }, 1500);
   }, []);
 
+  const menuPress = () => {};
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
-      <View style={styles.topContainer}>
-        <TopBackComp text="Contacts" extraStyle={styles.extarBackStyle} />
-      </View>
+      <ChatTopBar text="Contacts" contacts={true} menuPrees={menuPress} />
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={AppColors.DEEPBLUE} />

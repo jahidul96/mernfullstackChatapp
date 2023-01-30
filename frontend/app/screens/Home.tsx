@@ -1,6 +1,5 @@
 import {
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   StatusBar,

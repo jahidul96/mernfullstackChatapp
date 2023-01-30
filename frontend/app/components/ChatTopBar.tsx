@@ -10,11 +10,18 @@ interface Props {
   text?: string;
   home?: boolean;
   menuPrees?: any;
+  contacts?: boolean;
 }
-const ChatTopBar: FC<Props> = ({contactData, text, home, menuPrees}) => {
+const ChatTopBar: FC<Props> = ({
+  contactData,
+  text,
+  home,
+  menuPrees,
+  contacts,
+}) => {
   const navigation = useNavigation<any>();
   return (
-    <View style={[styles.container, {height: home ? 70 : 60}]}>
+    <View style={[styles.container, {height: home || contacts ? 70 : 60}]}>
       {/* profile container */}
       <View style={styles.leftContainer}>
         {home ? null : (
@@ -29,8 +36,12 @@ const ChatTopBar: FC<Props> = ({contactData, text, home, menuPrees}) => {
       </View>
 
       {/* icon container */}
-      <View style={[styles.rightContainer, home && {width: '20%'}]}>
-        {home ? null : (
+      <View
+        style={[
+          styles.rightContainer,
+          home || contacts ? {width: '20%'} : {width: '35%'},
+        ]}>
+        {home || contacts ? null : (
           <TouchableOpacity>
             <Ionicons name={'md-videocam'} size={22} color={AppColors.WHITE} />
           </TouchableOpacity>
@@ -38,7 +49,7 @@ const ChatTopBar: FC<Props> = ({contactData, text, home, menuPrees}) => {
 
         <TouchableOpacity>
           <Ionicons
-            name={home ? 'search' : 'call'}
+            name={home || contacts ? 'search' : 'call'}
             size={21}
             color={AppColors.WHITE}
           />
