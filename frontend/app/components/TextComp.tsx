@@ -3,8 +3,11 @@ import React, {FC} from 'react';
 
 interface Props {
   text: string;
+  extraTextStyle?: any;
 }
-const TextComp: FC<Props> = ({text}) => <Text style={styles.text}>{text}</Text>;
+const TextComp: FC<Props> = ({text, extraTextStyle}) => (
+  <Text style={[styles.text, extraTextStyle]}>{text}</Text>
+);
 
 export default TextComp;
 

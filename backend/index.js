@@ -27,11 +27,11 @@ db()
   .catch((err) => {
     console.log(err.message);
   });
+
 // server listen
 const server = app.listen(PORT, () => console.log("Server started!!"));
 
-// socket
-
+// socket initialization
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
@@ -40,8 +40,8 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("join", (userdata) => {
-    socket.join(userdata._id);
+  socket.on("join", (user) => {
+    socket.join(user._id);
     socket.emit("connected");
   });
 

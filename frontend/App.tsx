@@ -2,9 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Register from './app/screens/Register';
-import Login from './app/screens/Login';
-import {AuthContext, AuthProvider} from './app/context/AuthContext';
+
+import {AuthContext} from './app/context/AuthContext';
 import Home from './app/screens/Home';
 import {getData} from './app/utils/AppStorage';
 import Loading from './app/screens/Loading';
@@ -13,6 +12,8 @@ import Contacts from './app/screens/Contacts';
 import NewChat from './app/screens/NewChat';
 import Profile from './app/screens/Profile';
 import CreateGroup from './app/screens/CreateGroup';
+import Register from './app/screens/auth/Register';
+import Login from './app/screens/auth/Login';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,24 +59,6 @@ const App = () => {
             </>
           )}
         </Stack.Navigator>
-        {/* {user ? (
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name="Home" component={Home} />
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator
-            initialRouteName="Register"
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Login" component={Login} />
-          </Stack.Navigator>
-        )} */}
       </AuthContext.Provider>
     </NavigationContainer>
   );

@@ -73,7 +73,9 @@ router.get("/:id", async (req, res) => {
       members: {
         $in: [req.params.id],
       },
-    }).populate("members", "-password");
+    })
+      .populate("members", "-password")
+      .sort({ updatedAt: -1 });
 
     res.status(200).json(mychats);
   } catch (error) {

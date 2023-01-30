@@ -98,6 +98,7 @@ const Home: FC<Props> = ({navigation}) => {
               chatId={chat?._id}
               onPress={gotoMsg}
               lastMsg={chat?.lastMsg}
+              updatedAt={chat?.updatedAt}
               onLongPress={wantToDelete}
             />
           ))}
