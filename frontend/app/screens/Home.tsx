@@ -16,6 +16,7 @@ import ChatTopBar from '../components/ChatTopBar';
 import {Alert} from 'react-native';
 import TextButton from '../components/TextButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TextComp from '../components/TextComp';
 
 interface Props {
   navigation: any;
@@ -24,6 +25,8 @@ const Home: FC<Props> = ({navigation}) => {
   const {user, setUser} = useContext<any>(AuthContext);
   const [allChats, setAllChats] = useState([]);
   const [showDialogBox, setShowDialogBox] = useState(false);
+
+  // console.log(user);
 
   // base url
   const url = `${endpoint}/api/chat/${user?._id}`;
@@ -85,22 +88,31 @@ const Home: FC<Props> = ({navigation}) => {
       )}
 
       {/* topbar content */}
-      <ChatTopBar home={true} text="Chatapp" menuPrees={menuPress} />
+      <ChatTopBar
+        text="Chatapp"
+        extraHeaderStyle={styles.extraHeaderStyle}
+        extraTextStyle={styles.extraTextStyle}
+        menuPress={() => setShowDialogBox(!showDialogBox)}
+      />
       {/* all chats chats */}
 
       <ScrollView>
         <View style={styles.chatWrapper}>
-          {allChats.map((chat: any, index) => (
-            <ChatMessageProfile
-              key={index}
-              members={chat?.members}
-              chatId={chat?._id}
-              onPress={gotoMsg}
-              lastMsg={chat?.lastMsg}
-              updatedAt={chat?.updatedAt}
-              onLongPress={wantToDelete}
-            />
-          ))}
+          {allChats.length == 0 ? (
+            <TextComp text="No chats till now" />
+          ) : (
+            allChats.map((chat: any, index) => (
+              <ChatMessageProfile
+                key={index}
+                members={chat?.members}
+                chatId={chat?._id}
+                onPress={gotoMsg}
+                lastMsg={chat?.lastMsg}
+                updatedAt={chat?.updatedAt}
+                onLongPress={wantToDelete}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
 
@@ -164,5 +176,11 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.WHITE,
     elevation: 2,
     zIndex: 999,
+  },
+  extraTextStyle: {
+    fontSize: 20,
+  },
+  extraHeaderStyle: {
+    height: 80,
   },
 });

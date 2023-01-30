@@ -1,98 +1,84 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {AppColors} from '../utils/AppColors';
 import {useNavigation} from '@react-navigation/native';
+import {Appbar} from 'react-native-paper';
 
 interface Props {
   contactData?: any;
-  text?: string;
-  home?: boolean;
-  menuPrees?: any;
-  contacts?: boolean;
+  text?: any;
+  back?: boolean;
+  extraTextStyle?: any;
+  extraHeaderStyle?: any;
+  messageBar?: boolean;
+  menuPress?: any;
 }
 const ChatTopBar: FC<Props> = ({
   contactData,
   text,
-  home,
-  menuPrees,
-  contacts,
+  extraTextStyle,
+  back,
+  extraHeaderStyle,
+  messageBar,
+  menuPress,
 }) => {
   const navigation = useNavigation<any>();
   return (
-    <View style={[styles.container, {height: home || contacts ? 70 : 60}]}>
-      {/* profile container */}
-      <View style={styles.leftContainer}>
-        {home ? null : (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back" size={22} color={AppColors.WHITE} />
-          </TouchableOpacity>
-        )}
+    <Appbar.Header
+      style={[styles.headerStyle, extraHeaderStyle]}
+      elevated={true}>
+      {back && (
+        <Appbar.BackAction
+          color={AppColors.WHITE}
+          onPress={() => navigation.goBack()}
+        />
+      )}
+      <Appbar.Content
+        titleStyle={[styles.appText, extraTextStyle]}
+        title={text}
+      />
 
-        <Text style={styles.namePlaceholder}>
-          {text ? text : contactData?.name}
-        </Text>
-      </View>
+      {messageBar && (
+        <Appbar.Action
+          icon={require('../assets/icons/video.png')}
+          color={AppColors.WHITE}
+          onPress={() => {}}
+        />
+      )}
+      {messageBar ? (
+        <Appbar.Action
+          size={20}
+          icon={require('../assets/icons/phone.png')}
+          color={AppColors.WHITE}
+          onPress={() => {}}
+        />
+      ) : (
+        <Appbar.Action
+          icon="magnify"
+          color={AppColors.WHITE}
+          onPress={() => {}}
+        />
+      )}
 
-      {/* icon container */}
-      <View
-        style={[
-          styles.rightContainer,
-          home || contacts ? {width: '20%'} : {width: '35%'},
-        ]}>
-        {home || contacts ? null : (
-          <TouchableOpacity>
-            <Ionicons name={'md-videocam'} size={22} color={AppColors.WHITE} />
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity>
-          <Ionicons
-            name={home || contacts ? 'search' : 'call'}
-            size={21}
-            color={AppColors.WHITE}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={menuPrees}>
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color={AppColors.WHITE}
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
+      <Appbar.Action
+        icon="dots-vertical"
+        color={AppColors.WHITE}
+        onPress={menuPress}
+      />
+    </Appbar.Header>
   );
 };
 
 export default ChatTopBar;
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: 60,
+  headerStyle: {
     backgroundColor: AppColors.DEEPBLUE,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10,
+    height: 80,
   },
-  leftContainer: {
-    width: '50%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  namePlaceholder: {
+  appText: {
     color: AppColors.WHITE,
-    fontSize: 19,
-    marginLeft: 8,
-    textTransform: 'capitalize',
-  },
-  rightContainer: {
-    width: '35%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    fontSize: 23,
+    fontWeight: 'bold',
   },
 });

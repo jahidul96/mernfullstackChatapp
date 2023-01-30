@@ -15,7 +15,7 @@ export const sendMessage = (url, messageData, socket, userId, contactId) => {
     .then(async data => {
       // console.log(data);
       // data passing to socket so user can recive data instantly
-      socket.emit('new message', data, userId, [userId, contactId]);
+      socket.emit('new message', data, [userId, contactId]);
       return data;
     })
     .catch(err => {

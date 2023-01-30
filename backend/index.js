@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat room", (room) => {
     socket.join(room);
-    console.log("user joined rooom " + room);
+    // console.log("user joined rooom " + room);
   });
 
   // typing indicators
@@ -57,11 +57,7 @@ io.on("connection", (socket) => {
   });
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
-  socket.on("new message", (newmessage, userid, users) => {
-    // console.log(newmessage);
-    // console.log(user);
-    // console.log(users);
-
+  socket.on("new message", (newmessage, users) => {
     if (!users) return console.log("no chat user found");
     users.forEach((user) => {
       if (user == newmessage.senderId) return;

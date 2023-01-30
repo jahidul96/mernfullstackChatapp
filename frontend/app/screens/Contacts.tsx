@@ -12,8 +12,8 @@ import {endpoint} from '../api/endpoint';
 import {getDataOnce} from '../api/getDataOneTime';
 import {AppColors} from '../utils/AppColors';
 import ContactProfileComp from '../components/ContactProfileComp';
-import TopBackComp from '../components/TopBackComp';
 import ChatTopBar from '../components/ChatTopBar';
+import {Appbar} from 'react-native-paper';
 
 interface Props {
   navigation: any;
@@ -47,7 +47,12 @@ const Contacts: FC<Props> = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
-      <ChatTopBar text="Contacts" contacts={true} menuPrees={menuPress} />
+      <ChatTopBar
+        text="Contacts"
+        back={true}
+        extraTextStyle={styles.extraTextStyle}
+        extraHeaderStyle={styles.extraHeaderStyle}
+      />
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={AppColors.DEEPBLUE} />
@@ -94,5 +99,11 @@ const styles = StyleSheet.create({
   },
   extarBackStyle: {
     paddingHorizontal: 0,
+  },
+  extraTextStyle: {
+    fontSize: 20,
+  },
+  extraHeaderStyle: {
+    height: 70,
   },
 });

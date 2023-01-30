@@ -11,6 +11,8 @@ interface msgTypes {
 const Message: FC<msgTypes> = ({msg, index, currentuser}) => {
   const [showMsgTime, setShowMsgTime] = useState(false);
   // console.log(msg);
+
+  // console.log(currentuser);
   return (
     <TouchableOpacity
       activeOpacity={0.6}
@@ -18,14 +20,14 @@ const Message: FC<msgTypes> = ({msg, index, currentuser}) => {
       onPress={() => setShowMsgTime(!showMsgTime)}
       style={[
         styles.msgTextWraper,
-        msg.senderId._id == currentuser._id
+        msg.senderId?._id == currentuser?._id
           ? styles.myMsgStyle
           : styles.friendMsg,
       ]}>
       <Text
         style={[
           styles.msgTextStyle,
-          msg.senderId._id == currentuser._id && styles.mymsgTextStyle,
+          msg.senderId?._id == currentuser?._id && styles.mymsgTextStyle,
         ]}>
         {msg?.text}
       </Text>

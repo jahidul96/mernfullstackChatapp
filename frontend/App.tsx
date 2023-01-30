@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+import {Provider as PaperProvider} from 'react-native-paper';
 import {AuthContext} from './app/context/AuthContext';
 import Home from './app/screens/Home';
 import {getData} from './app/utils/AppStorage';
@@ -37,28 +37,30 @@ const App = () => {
   return (
     <NavigationContainer>
       <AuthContext.Provider value={{user, setUser}}>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          {appLoading ? (
-            <Stack.Screen name="Loading" component={Loading} />
-          ) : user ? (
-            <>
-              <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="Chat" component={Chat} />
-              <Stack.Screen name="NewChat" component={NewChat} />
-              <Stack.Screen name="Contacts" component={Contacts} />
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="CreateGroup" component={CreateGroup} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name="Register" component={Register} />
-              <Stack.Screen name="Login" component={Login} />
-            </>
-          )}
-        </Stack.Navigator>
+        <PaperProvider>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            {appLoading ? (
+              <Stack.Screen name="Loading" component={Loading} />
+            ) : user ? (
+              <>
+                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Chat" component={Chat} />
+                <Stack.Screen name="NewChat" component={NewChat} />
+                <Stack.Screen name="Contacts" component={Contacts} />
+                <Stack.Screen name="Profile" component={Profile} />
+                <Stack.Screen name="CreateGroup" component={CreateGroup} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="Login" component={Login} />
+              </>
+            )}
+          </Stack.Navigator>
+        </PaperProvider>
       </AuthContext.Provider>
     </NavigationContainer>
   );

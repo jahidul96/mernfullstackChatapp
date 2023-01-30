@@ -1,4 +1,4 @@
-export const endpoint = 'http://192.168.1.2:4000';
+export const endpoint = 'http://192.168.1.5:4000';
 export const registerUrl = `${endpoint}/api/auth/register`;
 export const loginUrl = `${endpoint}/api/auth/login`;
 // post/send message route

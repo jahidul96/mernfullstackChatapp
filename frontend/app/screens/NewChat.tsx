@@ -104,6 +104,8 @@ const NewChat: FC<Props> = ({route}) => {
           contactData?._id,
         )
           .then(data => {
+            // console.log('sending msg response');
+            // console.log(data);
             setAllMsg([...allMsg, data]);
           })
           .catch(err => {
@@ -124,7 +126,13 @@ const NewChat: FC<Props> = ({route}) => {
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
       {/* top header comp */}
-      <ChatTopBar contactData={contactData} />
+      <ChatTopBar
+        back
+        text={contactData.name}
+        extraTextStyle={styles.extraTextStyle}
+        extraHeaderStyle={styles.extraHeaderStyle}
+        messageBar
+      />
 
       {/* messages */}
       <ScrollView
@@ -172,5 +180,11 @@ const styles = StyleSheet.create({
     width: '25%',
     marginTop: -10,
     backgroundColor: AppColors.DEEPBLUE,
+  },
+  extraTextStyle: {
+    fontSize: 20,
+  },
+  extraHeaderStyle: {
+    height: 65,
   },
 });

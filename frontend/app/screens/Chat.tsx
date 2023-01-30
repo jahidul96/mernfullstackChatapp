@@ -29,7 +29,7 @@ const Chat: FC<Props> = ({route}) => {
   // api and route end points
 
   // update last msg route path
-  const updateroutepath = `${endpoint}api/chat/update/${chatId}`;
+  const updateroutepath = `${endpoint}/api/chat/update/${chatId}`;
   // all msg api endpoint
   const messageUrl = `${endpoint}/api/message?chatId=${chatId}`;
 
@@ -93,6 +93,7 @@ const Chat: FC<Props> = ({route}) => {
     // sending msg and updating reuseable func
     sendMessage(postmessageurl, data, socket, user?._id, contactData?._id)
       .then(data => {
+        // console.log(data);
         // update last msg
         updateData(updateroutepath, updatedTextData)
           .then(data => {
@@ -115,7 +116,13 @@ const Chat: FC<Props> = ({route}) => {
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
       {/* top header comp */}
-      <ChatTopBar contactData={contactData} />
+      <ChatTopBar
+        back
+        text={contactData?.name}
+        extraTextStyle={styles.extraTextStyle}
+        extraHeaderStyle={styles.extraHeaderStyle}
+        messageBar
+      />
 
       {/* messages */}
       <ScrollView
@@ -168,5 +175,11 @@ const styles = StyleSheet.create({
     width: '25%',
     marginTop: -10,
     backgroundColor: AppColors.DEEPBLUE,
+  },
+  extraTextStyle: {
+    fontSize: 20,
+  },
+  extraHeaderStyle: {
+    height: 65,
   },
 });
