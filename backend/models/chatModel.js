@@ -10,6 +10,14 @@ const chatSchema = new mongoose.Schema(
     ],
 
     lastMsg: String,
+    seen: {
+      type: Boolean,
+      default: false,
+    },
+    senderId: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

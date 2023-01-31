@@ -1,8 +1,8 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {FC} from 'react';
-import {AppColors} from '../utils/AppColors';
-import {useNavigation} from '@react-navigation/native';
-import {Appbar} from 'react-native-paper';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { FC } from "react";
+import { AppColors } from "../utils/AppColors";
+import { useNavigation } from "@react-navigation/native";
+import { Appbar } from "react-native-paper";
 
 interface Props {
   contactData?: any;
@@ -12,6 +12,7 @@ interface Props {
   extraHeaderStyle?: any;
   messageBar?: boolean;
   menuPress?: any;
+  backPress?: any;
 }
 const ChatTopBar: FC<Props> = ({
   contactData,
@@ -21,17 +22,16 @@ const ChatTopBar: FC<Props> = ({
   extraHeaderStyle,
   messageBar,
   menuPress,
+  backPress,
 }) => {
   const navigation = useNavigation<any>();
   return (
     <Appbar.Header
       style={[styles.headerStyle, extraHeaderStyle]}
-      elevated={true}>
+      elevated={true}
+    >
       {back && (
-        <Appbar.BackAction
-          color={AppColors.WHITE}
-          onPress={() => navigation.goBack()}
-        />
+        <Appbar.BackAction color={AppColors.WHITE} onPress={backPress} />
       )}
       <Appbar.Content
         titleStyle={[styles.appText, extraTextStyle]}
@@ -40,7 +40,7 @@ const ChatTopBar: FC<Props> = ({
 
       {messageBar && (
         <Appbar.Action
-          icon={require('../assets/icons/video.png')}
+          icon={require("../assets/icons/video.png")}
           color={AppColors.WHITE}
           onPress={() => {}}
         />
@@ -48,7 +48,7 @@ const ChatTopBar: FC<Props> = ({
       {messageBar ? (
         <Appbar.Action
           size={20}
-          icon={require('../assets/icons/phone.png')}
+          icon={require("../assets/icons/phone.png")}
           color={AppColors.WHITE}
           onPress={() => {}}
         />
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   appText: {
     color: AppColors.WHITE,
     fontSize: 23,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    textTransform: "capitalize",
   },
 });

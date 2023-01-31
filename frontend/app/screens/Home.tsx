@@ -4,25 +4,26 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
-} from 'react-native';
-import React, {FC, useContext, useState, useEffect} from 'react';
-import {AuthContext} from '../context/AuthContext';
-import {endpoint} from '../api/endpoint';
-import {getDataOnce} from '../api/getDataOneTime';
-import {AppColors} from '../utils/AppColors';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import ChatMessageProfile from '../components/ChatMessageProfile';
-import ChatTopBar from '../components/ChatTopBar';
-import {Alert} from 'react-native';
-import TextButton from '../components/TextButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import TextComp from '../components/TextComp';
+} from "react-native";
+import React, { FC, useContext, useState, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { endpoint } from "../api/endpoint";
+import { getDataOnce } from "../api/getDataOneTime";
+import { AppColors } from "../utils/AppColors";
+import ChatMessageProfile from "../components/ChatMessageProfile";
+import ChatTopBar from "../components/ChatTopBar";
+import { Alert } from "react-native";
+import TextButton from "../components/TextButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import TextComp from "../components/TextComp";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { updateData } from "../api/updateData";
 
 interface Props {
   navigation: any;
 }
-const Home: FC<Props> = ({navigation}) => {
-  const {user, setUser} = useContext<any>(AuthContext);
+const Home: FC<Props> = ({ navigation }) => {
+  const { user, setUser } = useContext<any>(AuthContext);
   const [allChats, setAllChats] = useState([]);
   const [showDialogBox, setShowDialogBox] = useState(false);
 
@@ -32,13 +33,13 @@ const Home: FC<Props> = ({navigation}) => {
   const url = `${endpoint}/api/chat/${user?._id}`;
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       getDataOnce(url)
-        .then(data => {
+        .then((data) => {
           // console.log(data);
           setAllChats(data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     });
@@ -47,13 +48,23 @@ const Home: FC<Props> = ({navigation}) => {
 
   // gotoMsg
   const gotoMsg = (chat: any, chatId: any) => {
-    // console.log(chatId);
-    navigation.navigate('Chat', {contactData: chat, chatId: chatId});
+    // update last msg route path
+    const updateroutepath = `${endpoint}/api/chat/update/${chatId}`;
+    const updatedData = {
+      seen: true,
+    };
+
+    updateData(updateroutepath, updatedData)
+      .then((data) => {
+        // console.log(data);
+      })
+      .catch((err) => console.log(err));
+    navigation.navigate("Chat", { contactData: chat, chatId: chatId });
   };
 
   // wantToDelete
   const wantToDelete = () => {
-    Alert.alert('hello');
+    Alert.alert("hello");
   };
 
   // menuPrees
@@ -71,7 +82,7 @@ const Home: FC<Props> = ({navigation}) => {
           <TextButton
             text="New Group"
             onPress={() => {
-              navigation.navigate('CreateGroup');
+              navigation.navigate("CreateGroup");
               setShowDialogBox(!showDialogBox);
             }}
           />
@@ -108,8 +119,10 @@ const Home: FC<Props> = ({navigation}) => {
                 chatId={chat?._id}
                 onPress={gotoMsg}
                 lastMsg={chat?.lastMsg}
+                seen={chat?.seen}
                 updatedAt={chat?.updatedAt}
                 onLongPress={wantToDelete}
+                senderId={chat?.senderId}
               />
             ))
           )}
@@ -121,8 +134,9 @@ const Home: FC<Props> = ({navigation}) => {
         style={styles.flotingContainer}
         onPress={() => {
           setShowDialogBox(false);
-          navigation.navigate('Contacts', {allChats: allChats});
-        }}>
+          navigation.navigate("Contacts", { allChats: allChats });
+        }}
+      >
         <MaterialIcons name="chat" size={20} color={AppColors.WHITE} />
       </TouchableOpacity>
     </View>
@@ -137,17 +151,17 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.WHITE,
   },
   topContainer: {
-    width: '100%',
+    width: "100%",
     height: 60,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 15,
     backgroundColor: AppColors.DEEPBLUE,
   },
   appText: {
     color: AppColors.WHITE,
     fontSize: 18,
-    fontWeight: 'bold',
-    fontStyle: 'italic',
+    fontWeight: "bold",
+    fontStyle: "italic",
   },
 
   chatWrapper: {
@@ -157,22 +171,22 @@ const styles = StyleSheet.create({
   flotingContainer: {
     width: 55,
     height: 55,
-    position: 'absolute',
+    position: "absolute",
     backgroundColor: AppColors.DEEPBLUE,
     borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     bottom: 40,
     right: 40,
   },
 
   dialogBox: {
-    position: 'absolute',
-    width: '45%',
-    height: '20%',
+    position: "absolute",
+    width: "45%",
+    height: "20%",
     right: 15,
     top: 60,
-    justifyContent: 'center',
+    justifyContent: "center",
     backgroundColor: AppColors.WHITE,
     elevation: 2,
     zIndex: 999,

@@ -1,30 +1,32 @@
-import {StyleSheet, View, ScrollView, Alert, StatusBar} from 'react-native';
-import React, {useState, FC, useEffect, useContext, useRef} from 'react';
-import {AppColors} from '../utils/AppColors';
-import InputComp from '../components/InputComp';
-import ButtonComp from '../components/ButtonComp';
-import {AuthContext} from '../context/AuthContext';
-import {getDataOnce} from '../api/getDataOneTime';
-import {createchaturl, endpoint, postmessageurl} from '../api/endpoint';
-import {postDataToDb, sendMessage} from '../api/postDataToDb';
-import ChatTopBar from '../components/ChatTopBar';
-import {io} from 'socket.io-client';
-import Allmsg from '../components/Allmsg';
-import {updateData} from '../api/updateData';
+import { StyleSheet, View, ScrollView, Alert, StatusBar } from "react-native";
+import React, { useState, FC, useEffect, useContext, useRef } from "react";
+import { AppColors } from "../utils/AppColors";
+import InputComp from "../components/InputComp";
+import ButtonComp from "../components/ButtonComp";
+import { AuthContext } from "../context/AuthContext";
+import { getDataOnce } from "../api/getDataOneTime";
+import { createchaturl, endpoint, postmessageurl } from "../api/endpoint";
+import { postDataToDb, sendMessage } from "../api/postDataToDb";
+import ChatTopBar from "../components/ChatTopBar";
+import { io } from "socket.io-client";
+import Allmsg from "../components/Allmsg";
+import { updateData } from "../api/updateData";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
   route: any;
 }
 
 var socket: any, selectetdChatCompare: any;
-const NewChat: FC<Props> = ({route}) => {
-  const {user} = useContext<any>(AuthContext);
-  const {contactData, chatId} = route.params;
-  const [text, setText] = useState('');
+const NewChat: FC<Props> = ({ route }) => {
+  const { user } = useContext<any>(AuthContext);
+  const { contactData, chatId } = route.params;
+  const [text, setText] = useState("");
   const [allMsg, setAllMsg] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [socketConnected, setSocketConnected] = useState(false);
   const scrollViewRef = useRef<any>(null);
+  const navigation = useNavigation<any>();
 
   // api endpoints
 
@@ -34,14 +36,14 @@ const NewChat: FC<Props> = ({route}) => {
   // socket io
   useEffect(() => {
     socket = io(endpoint);
-    socket.emit('join', user);
-    socket.on('connected', () => setSocketConnected(true));
+    socket.emit("join", user);
+    socket.on("connected", () => setSocketConnected(true));
     selectetdChatCompare = chatId;
-    socket.emit('chat room', chatId);
+    socket.emit("chat room", chatId);
   }, []);
 
   useEffect(() => {
-    socket?.on('message recived', (newmessageRecived: any) => {
+    socket?.on("message recived", (newmessageRecived: any) => {
       if (
         !selectetdChatCompare ||
         selectetdChatCompare !== newmessageRecived.chatId
@@ -53,30 +55,37 @@ const NewChat: FC<Props> = ({route}) => {
     });
   });
   useEffect(() => {
-    scrollViewRef.current?.scrollToEnd({animated: true});
+    scrollViewRef.current?.scrollToEnd({ animated: true });
   }, []);
   useEffect(() => {
-    scrollViewRef.current?.scrollToEnd({animated: true});
+    scrollViewRef.current?.scrollToEnd({ animated: true });
   }, [allMsg]);
 
   // get all messages
   useEffect(() => {
     setTimeout(() => {
       getDataOnce(messageUrl)
-        .then(data => {
+        .then((data) => {
           // console.log(data);
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }, 1500);
   }, []);
 
+  // backPress
+
+  const backPress = () => {
+    navigation.goBack();
+    // socket.emit("stop typing", contactData?._id);
+  };
+
   // sendmsg
   const sendMsg = () => {
     if (!text) {
-      return Alert.alert('Type a message!');
+      return Alert.alert("Type a message!");
     }
 
     const chatdata = {
@@ -87,7 +96,7 @@ const NewChat: FC<Props> = ({route}) => {
 
     // creating a new chat and then sending a text bcz it's a new chat not exiting!!!
     postDataToDb(chatdata, createchaturl)
-      .then(data => {
+      .then((data) => {
         // console.log(data);
         const msgData = {
           chatId: data._id,
@@ -101,20 +110,20 @@ const NewChat: FC<Props> = ({route}) => {
           msgData,
           socket,
           user?._id,
-          contactData?._id,
+          contactData?._id
         )
-          .then(data => {
+          .then((data) => {
             // console.log('sending msg response');
             // console.log(data);
             setAllMsg([...allMsg, data]);
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
 
-        setText('');
+        setText("");
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -122,7 +131,8 @@ const NewChat: FC<Props> = ({route}) => {
     <View
       style={{
         flex: 1,
-      }}>
+      }}
+    >
       <StatusBar backgroundColor={AppColors.DEEPBLUE} />
 
       {/* top header comp */}
@@ -132,6 +142,7 @@ const NewChat: FC<Props> = ({route}) => {
         extraTextStyle={styles.extraTextStyle}
         extraHeaderStyle={styles.extraHeaderStyle}
         messageBar
+        backPress={backPress}
       />
 
       {/* messages */}
@@ -139,7 +150,8 @@ const NewChat: FC<Props> = ({route}) => {
         ref={scrollViewRef}
         style={{
           backgroundColor: AppColors.LIGHTDEEPBLUE,
-        }}>
+        }}
+      >
         <Allmsg loading={loading} allMsg={allMsg} />
       </ScrollView>
 
@@ -165,19 +177,19 @@ export default NewChat;
 
 const styles = StyleSheet.create({
   footerContainer: {
-    width: '100%',
+    width: "100%",
     height: 80,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     backgroundColor: AppColors.LIGHTDEEPBLUE,
     paddingHorizontal: 15,
   },
   extraStyle: {
-    width: '70%',
+    width: "70%",
   },
   btnExtraStyle: {
-    width: '25%',
+    width: "25%",
     marginTop: -10,
     backgroundColor: AppColors.DEEPBLUE,
   },

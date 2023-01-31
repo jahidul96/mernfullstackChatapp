@@ -1,5 +1,5 @@
-import axios from 'axios';
-import {endpoint} from './endpoint';
+import axios from "axios";
+import { endpoint } from "./endpoint";
 
 export const postDataToDb = async (userdata, url) => {
   try {
@@ -10,15 +10,15 @@ export const postDataToDb = async (userdata, url) => {
   }
 };
 
-export const sendMessage = (url, messageData, socket, userId, contactId) => {
+export const sendMessage = (url, messageData, socket, chatId) => {
   return postDataToDb(messageData, url)
-    .then(async data => {
+    .then(async (data) => {
       // console.log(data);
       // data passing to socket so user can recive data instantly
-      socket.emit('new message', data, [userId, contactId]);
+      socket.emit("new message", data, chatId);
       return data;
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       return err;
     });

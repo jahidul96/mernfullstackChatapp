@@ -11,6 +11,8 @@ interface Props {
   onLongPress: any;
   lastMsg: any;
   updatedAt?: any;
+  seen?: boolean;
+  senderId?: any;
 }
 
 const img =
@@ -23,11 +25,13 @@ const ChatMessageProfile: FC<Props> = ({
   onLongPress,
   lastMsg,
   updatedAt,
+  seen,
+  senderId,
 }) => {
   const { user } = useContext<any>(AuthContext);
 
   // console.log(updatedAt);
-
+  // console.log(seen);
   const allChats = members?.filter((member: any) => member._id !== user?._id);
 
   return (
@@ -38,6 +42,7 @@ const ChatMessageProfile: FC<Props> = ({
           key={index}
           onLongPress={onLongPress}
           onPress={() => onPress(chat, chatId)}
+          activeOpacity={0.9}
         >
           <View style={styles.imgWrapper}>
             <Image source={{ uri: img }} style={styles.imgStyle} />
@@ -48,8 +53,14 @@ const ChatMessageProfile: FC<Props> = ({
               {/* <Text style={styles.date}>{updatedAt}</Text> */}
               <TimeAgo time={updatedAt} hideAgo={true} />
             </View>
-
-            <Text style={styles.lastmsg}>{lastMsg}</Text>
+            <View style={styles.nameandDateContainer}>
+              <Text style={styles.lastmsg}>{lastMsg}</Text>
+              {senderId == user?._id || seen ? null : (
+                <View style={styles.notificationContainer}>
+                  <Text style={styles.notificationText}>new</Text>
+                </View>
+              )}
+            </View>
           </View>
         </TouchableOpacity>
       ))}
@@ -84,7 +95,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginLeft: 8,
-    marginBottom: 4,
   },
   nameandDateContainer: {
     flexDirection: "row",
@@ -98,4 +108,18 @@ const styles = StyleSheet.create({
   },
   date: {},
   lastmsg: {},
+  notificationContainer: {
+    backgroundColor: "red",
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 4,
+    paddingVertical: 1,
+    paddingHorizontal: 5,
+  },
+  notificationText: {
+    color: AppColors.WHITE,
+    marginBottom: 1,
+    fontWeight: "bold",
+  },
 });

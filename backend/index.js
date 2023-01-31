@@ -40,28 +40,21 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("join", (user) => {
-    socket.join(user._id);
+  socket.on("chat room", (chatId) => {
+    socket.join(chatId);
     socket.emit("connected");
+    // console.log("user connected to room " + chatId);
   });
 
-  socket.on("chat room", (room) => {
-    socket.join(room);
-    // console.log("user joined rooom " + room);
+  socket.on("new message", (newmessage, chatId) => {
+    // console.log(newmessage);
+    socket.in(chatId).emit("message recived", newmessage);
   });
 
-  // typing indicators
-  socket.on("typing", (room) => {
-    socket.in(room).emit("typing");
-    // console.log(room);
+  socket.on("typing", (chatId) => {
+    socket.to(chatId).emit("typing");
   });
-  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
-
-  socket.on("new message", (newmessage, users) => {
-    if (!users) return console.log("no chat user found");
-    users.forEach((user) => {
-      if (user == newmessage.senderId) return;
-      socket.in(user).emit("message recived", newmessage);
-    });
+  socket.on("stop typing", (chatId) => {
+    socket.to(chatId).emit("stop typing");
   });
 });

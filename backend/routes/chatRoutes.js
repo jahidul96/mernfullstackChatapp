@@ -18,6 +18,7 @@ router.post("/createchat", async (req, res) => {
     const createChat = new Chat({
       members: [req.body.senderId, req.body.reciverId],
       lastMsg: req.body.lastMsg,
+      senderId: req.body.senderId,
     });
     const chat = await (
       await createChat.save()
@@ -43,7 +44,6 @@ router.put("/update/:id", async (req, res) => {
 });
 
 // get a specific chats id!!
-
 router.get("/singlechat", async (req, res) => {
   const { userid, contactid } = req.query;
   try {

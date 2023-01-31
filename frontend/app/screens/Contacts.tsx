@@ -5,22 +5,23 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import React, {FC, useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../context/AuthContext';
-import {endpoint} from '../api/endpoint';
-import {getDataOnce} from '../api/getDataOneTime';
-import {AppColors} from '../utils/AppColors';
-import ContactProfileComp from '../components/ContactProfileComp';
-import ChatTopBar from '../components/ChatTopBar';
-import {Appbar} from 'react-native-paper';
+} from "react-native";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { endpoint } from "../api/endpoint";
+import { getDataOnce } from "../api/getDataOneTime";
+import { AppColors } from "../utils/AppColors";
+import ContactProfileComp from "../components/ContactProfileComp";
+import ChatTopBar from "../components/ChatTopBar";
+import { Appbar } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
   navigation: any;
   route: any;
 }
-const Contacts: FC<Props> = ({navigation, route}) => {
-  const {user} = useContext<any>(AuthContext);
+const Contacts: FC<Props> = ({ navigation, route }) => {
+  const { user } = useContext<any>(AuthContext);
   const [allusers, setAllusers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,12 +31,12 @@ const Contacts: FC<Props> = ({navigation, route}) => {
   useEffect(() => {
     setTimeout(() => {
       getDataOnce(url)
-        .then(data => {
+        .then((data) => {
           // console.log(data);
           setAllusers(data);
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           setLoading(false);
         });
@@ -43,6 +44,12 @@ const Contacts: FC<Props> = ({navigation, route}) => {
   }, []);
 
   const menuPress = () => {};
+
+  // backPress
+  const backPress = () => {
+    navigation.goBack();
+    // socket.emit("stop typing", contactData?._id);
+  };
 
   return (
     <View style={styles.container}>
@@ -52,6 +59,7 @@ const Contacts: FC<Props> = ({navigation, route}) => {
         back={true}
         extraTextStyle={styles.extraTextStyle}
         extraHeaderStyle={styles.extraHeaderStyle}
+        backPress={backPress}
       />
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -81,19 +89,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topContainer: {
-    width: '100%',
+    width: "100%",
     height: 60,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 15,
     backgroundColor: AppColors.DEEPBLUE,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   contactWraper: {
-    width: '100%',
+    width: "100%",
     paddingVertical: 10,
     paddingHorizontal: 10,
   },
